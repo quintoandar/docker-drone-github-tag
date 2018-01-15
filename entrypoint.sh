@@ -10,7 +10,7 @@ git tag ${PLUGIN_VERSION}
 if [ -n "$GITHUB_TOKEN" ]; then
     git push https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
-elif [ -n "$PLUGIN_API_KEY" ]
+elif [ -n "$PLUGIN_API_KEY" ]; then
     mkdir -p /root/.ssh
     touch /root/.ssh/known_hosts
     chmod 600 /root/.ssh/known_hosts
