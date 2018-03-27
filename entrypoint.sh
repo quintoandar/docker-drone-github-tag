@@ -4,6 +4,7 @@ set -e
 [ -z "$PLUGIN_VERSION" ] && echo "Missing version!" && exit 1
 [ -z "$DRONE_REPO_NAME" ] && echo "Missing Drone repo name!" && exit 1
 [ -z "$DRONE_REPO_OWNER" ] && echo "Missing Drone repo owner!" && exit 1
+[ -n "$DEPLOY_KEY" ] && PLUGIN_API_KEY=${DEPLOY_KEY};
 
 git tag ${PLUGIN_VERSION}
 
@@ -21,7 +22,7 @@ elif [ -n "$PLUGIN_API_KEY" ]; then
     if [ -f "$PLUGIN_API_KEY" ]; then
          cp $PLUGIN_API_KEY /root/.ssh/id_rsa
     else
-         echo $PLUGIN_API_KEY > /root/.ssh/id_rsa
+         echo "$PLUGIN_API_KEY" > /root/.ssh/id_rsa
     fi
 
     chmod 600 /root/.ssh/id_rsa
