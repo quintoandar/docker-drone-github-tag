@@ -6,7 +6,10 @@ set -e
 [ -z "$DRONE_REPO_OWNER" ] && echo "Missing Drone repo owner!" && exit 1
 [ -n "$DEPLOY_KEY" ] && PLUGIN_API_KEY=${DEPLOY_KEY};
 
-git tag ${PLUGIN_VERSION}
+EXTRA_ARGS="";
+[ "${PLUGIN_FORCE}" == "true" ] && EXTRA_ARGS="-f";
+
+git tag ${EXTRA_ARGS} ${PLUGIN_VERSION}
 
 if [ -n "$GITHUB_TOKEN" ]; then
     git push https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
