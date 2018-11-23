@@ -12,7 +12,7 @@ EXTRA_ARGS="";
 git tag ${EXTRA_ARGS} ${PLUGIN_VERSION}
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    git push https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
+    git push ${EXTRA_ARGS} https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
 elif [ -n "$PLUGIN_API_KEY" ]; then
     mkdir -p /root/.ssh
@@ -30,7 +30,7 @@ elif [ -n "$PLUGIN_API_KEY" ]; then
 
     chmod 600 /root/.ssh/id_rsa
     ssh-add /root/.ssh/id_rsa
-    git push git@github.com:${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
+    git push ${EXTRA_ARGS} git@github.com:${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
 else
     echo "Missing GitHub Token or API Key file!" && exit 1
