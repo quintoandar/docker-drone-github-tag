@@ -11,6 +11,12 @@ git tag ${PLUGIN_VERSION}
 if [ -n "$GITHUB_TOKEN" ]; then
     git push https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
+elif [ -n "$PLUGIN_GITHUB_TOKEN" ]; then
+    git push https://${PLUGIN_GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
+
+elif [ -n "$DRONE_NETRC_USERNAME" ]; then
+    git push https://${DRONE_NETRC_USERNAME}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
+
 elif [ -n "$PLUGIN_API_KEY" ]; then
     mkdir -p /root/.ssh
     touch /root/.ssh/known_hosts
@@ -30,6 +36,6 @@ elif [ -n "$PLUGIN_API_KEY" ]; then
     git push git@github.com:${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
 else
-    echo "Missing GitHub Token or API Key file!" && exit 1
+    echo "Missing GitHub Token ('$GITHUB_TOKEN', '$PLUGIN_GITHUB_TOKEN' or '$DRONE_NETRC_USERNAME') or API Key file ('$PLUGIN_API_KEY' or '$DEPLOY_KEY')!" && exit 1
 
 fi
