@@ -25,3 +25,16 @@ docker run --rm \
   quintoandar/drone-github-tag
 ```
 
+On a Drone pipeline (tested with 0.8.5):
+
+```
+  tag:
+    group: publish
+    image: quintoandar/drone-github-tag
+    version: ${DRONE_COMMIT:0:7}
+    when:
+      branch: ["master"]
+      event: ["push"]
+```
+
+The api key/github token is optional on Drone, because it automatically reads the token from DRONE_NETRC_USERNAME environment variable by default.
