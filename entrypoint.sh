@@ -6,10 +6,13 @@ set -e
 [ -z "$DRONE_REPO_OWNER" ] && echo "Missing Drone repo owner!" && exit 1
 [ -n "$DEPLOY_KEY" ] && PLUGIN_API_KEY=${DEPLOY_KEY};
 
-git tag ${PLUGIN_VERSION}
+EXTRA_ARGS="";
+[ "${PLUGIN_FORCE}" == "true" ] && EXTRA_ARGS="-f";
+
+git tag ${EXTRA_ARGS} ${PLUGIN_VERSION}
 
 if [ -n "$GITHUB_TOKEN" ]; then
-    git push https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
+    git push ${EXTRA_ARGS} https://${GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
 elif [ -n "$PLUGIN_GITHUB_TOKEN" ]; then
     git push https://${PLUGIN_GITHUB_TOKEN}@github.com/${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
@@ -33,7 +36,7 @@ elif [ -n "$PLUGIN_API_KEY" ]; then
 
     chmod 600 /root/.ssh/id_rsa
     ssh-add /root/.ssh/id_rsa
-    git push git@github.com:${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
+    git push ${EXTRA_ARGS} git@github.com:${DRONE_REPO_OWNER}/${DRONE_REPO_NAME} ${PLUGIN_VERSION}
 
 else
     echo "Missing GitHub Token ('$GITHUB_TOKEN', '$PLUGIN_GITHUB_TOKEN' or '$DRONE_NETRC_USERNAME') or API Key file ('$PLUGIN_API_KEY' or '$DEPLOY_KEY')!" && exit 1
